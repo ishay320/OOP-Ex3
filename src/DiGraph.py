@@ -36,16 +36,23 @@ class DiGraph(GraphInterface):
         """return a dictionary of all the nodes in the Graph, each node is represented using a pair
          (node_id, node_data)
         """
+        return self.nodes
 
     def all_in_edges_of_node(self, id1: int) -> dict:
         """return a dictionary of all the nodes connected to (into) node_id ,
         each node is represented using a pair (other_node_id, weight)
          """
+        if id1 not in self.dest_src:
+            return None
+        return self.dest_src[id1]
 
     def all_out_edges_of_node(self, id1: int) -> dict:
         """return a dictionary of all the nodes connected from node_id , each node is represented using a pair
         (other_node_id, weight)
         """
+        if id1 not in self.src_dest:
+            return None
+        return self.src_dest[id1]
 
     def get_mc(self) -> int:
         """
@@ -53,7 +60,7 @@ class DiGraph(GraphInterface):
         on every change in the graph state - the MC should be increased
         @return: The current version of this graph.
         """
-        raise self.mc
+        return self.mc
 
     def add_edge(self, id1: int, id2: int, weight: float) -> bool:
         """
@@ -106,6 +113,28 @@ class DiGraph(GraphInterface):
 
         Note: if the node id does not exists the function will do nothing
         """
+        if node_id not in self.nodes:
+            return False
+        if node_id in self.dest_src:
+            self.num_of_edges-=len(self.dest_src[node_id])
+            for i in self.dest_src[node_id].keys():
+                self.src_dest[i].pop(node_id)
+                if self.src_dest[i]=={}:
+                    self.src_dest.pop(i)
+                self.mc+=1
+            self.dest_src.pop(node_id)
+        if node_id in self.src_dest:
+            self.num_of_edges -=len(self.src_dest[node_id])
+            for i in self.src_dest[node_id].keys():
+                self.dest_src[i].pop(node_id)
+                if self.dest_src[i]=={}:
+                    self.dest_src.pop(i)
+                self.mc+=1
+            self.src_dest.pop(node_id)
+            self.mc += 1
+        self.nodes.pop(node_id)
+        self.mc+=1
+        return True
 
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
         """
