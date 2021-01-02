@@ -4,19 +4,33 @@ from GraphInterface import GraphInterface
 class DiGraph(GraphInterface):
     """This abstract class represents an interface of a graph."""
 
+    def __init__(self, graph=None):
+        if graph is not None:
+            self.src_dest = graph.src_dest
+            self.dest_src = graph.dest_src
+            self.nodes = graph.nodes
+            self.mc = graph.mc
+            self.num_of_edges = graph.num_of_edges
+        else:
+            self.src_dest = {}
+            self.dest_src = {}
+            self.nodes = {}
+            self.mc = 0
+            self.num_of_edges = 0
+
     def v_size(self) -> int:
         """
         Returns the number of vertices in this graph
         @return: The number of vertices in this graph
         """
-        raise NotImplementedError
+        return len(self.nodes)
 
     def e_size(self) -> int:
         """
         Returns the number of edges in this graph
         @return: The number of edges in this graph
         """
-        raise NotImplementedError
+        return self.num_of_edges
 
     def get_all_v(self) -> dict:
         """return a dictionary of all the nodes in the Graph, each node is represented using a pair
@@ -39,7 +53,7 @@ class DiGraph(GraphInterface):
         on every change in the graph state - the MC should be increased
         @return: The current version of this graph.
         """
-        raise NotImplementedError
+        raise self.mc
 
     def add_edge(self, id1: int, id2: int, weight: float) -> bool:
         """
@@ -51,7 +65,23 @@ class DiGraph(GraphInterface):
 
         Note: If the edge already exists or one of the nodes dose not exists the functions will do nothing
         """
-        raise NotImplementedError
+        if id1 not in self.nodes or id2 not in self.nodes or id2 == id1:
+            return False
+        if id1 in self.src_dest:  # check if the edge exist
+            if id2 in self.src_dest[id1]:
+                if self.src_dest[id1][id2] == weight:  ## TODO: check with boaz
+                    return False
+        if id1 in self.src_dest:
+            self.src_dest[id1][id2] = weight
+        else:
+            self.src_dest[id1] = {id2: weight}
+        if id2 in self.dest_src:
+            self.dest_src[id2][id1] = weight
+        else:
+            self.dest_src[id2] = {id1: weight}
+        self.mc += 1
+        self.num_of_edges += 1
+        return True
 
     def add_node(self, node_id: int, pos: tuple = None) -> bool:
         """
@@ -62,7 +92,11 @@ class DiGraph(GraphInterface):
 
         Note: if the node id already exists the node will not be added
         """
-        raise NotImplementedError
+        if node_id in self.nodes:
+            return False
+        self.nodes[node_id] = pos
+        self.mc += 1
+        return True
 
     def remove_node(self, node_id: int) -> bool:
         """
@@ -72,7 +106,6 @@ class DiGraph(GraphInterface):
 
         Note: if the node id does not exists the function will do nothing
         """
-        raise NotImplementedError
 
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
         """
