@@ -1,11 +1,15 @@
 from typing import List
 
+from DiGraph import DiGraph
 from GraphAlgoInterface import GraphAlgoInterface
 from src import GraphInterface
 
 
 class GraphAlgo(GraphAlgoInterface):
     """This abstract class represents an interface of a graph."""
+
+    def __init__(self):
+        self.graph=DiGraph()
 
     def get_graph(self) -> GraphInterface:
         """
