@@ -90,7 +90,7 @@ class DiGraph(GraphInterface):
         self.num_of_edges += 1
         return True
 
-    def add_node(self, node_id: int, pos: tuple = None) -> bool:
+    def add_node(self, node_id: int, pos: tuple = None) -> bool: # TODO: check if input is not int
         """
         Adds a node to the graph.
         @param node_id: The node ID
