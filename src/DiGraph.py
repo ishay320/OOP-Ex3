@@ -72,7 +72,7 @@ class DiGraph(GraphInterface):
 
         Note: If the edge already exists or one of the nodes dose not exists the functions will do nothing
         """
-        if id1 not in self.nodes or id2 not in self.nodes or id2 == id1:
+        if id1 not in self.nodes or id2 not in self.nodes or id2 == id1 or weight <= 0:
             return False
         if id1 in self.src_dest:  # check if the edge exist
             if id2 in self.src_dest[id1]:
@@ -90,7 +90,7 @@ class DiGraph(GraphInterface):
         self.num_of_edges += 1
         return True
 
-    def add_node(self, node_id: int, pos: tuple = None) -> bool: # TODO: check if input is not int
+    def add_node(self, node_id: int, pos: tuple = None) -> bool:  # TODO: check if input is not int
         """
         Adds a node to the graph.
         @param node_id: The node ID
