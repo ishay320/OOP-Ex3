@@ -90,7 +90,7 @@ class DiGraph(GraphInterface):
         self.num_of_edges += 1
         return True
 
-    def add_node(self, node_id: int, pos: tuple = None) -> bool:
+    def add_node(self, node_id: int, pos: tuple = None) -> bool: # TODO: check if input is not int
         """
         Adds a node to the graph.
         @param node_id: The node ID
@@ -116,24 +116,24 @@ class DiGraph(GraphInterface):
         if node_id not in self.nodes:
             return False
         if node_id in self.dest_src:
-            self.num_of_edges-=len(self.dest_src[node_id])
+            self.num_of_edges -= len(self.dest_src[node_id])
             for i in self.dest_src[node_id].keys():
                 self.src_dest[i].pop(node_id)
-                if self.src_dest[i]=={}:
+                if self.src_dest[i] == {}:
                     self.src_dest.pop(i)
-                self.mc+=1
+                self.mc += 1
             self.dest_src.pop(node_id)
         if node_id in self.src_dest:
-            self.num_of_edges -=len(self.src_dest[node_id])
+            self.num_of_edges -= len(self.src_dest[node_id])
             for i in self.src_dest[node_id].keys():
                 self.dest_src[i].pop(node_id)
-                if self.dest_src[i]=={}:
+                if self.dest_src[i] == {}:
                     self.dest_src.pop(i)
-                self.mc+=1
+                self.mc += 1
             self.src_dest.pop(node_id)
             self.mc += 1
         self.nodes.pop(node_id)
-        self.mc+=1
+        self.mc += 1
         return True
 
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
@@ -145,4 +145,18 @@ class DiGraph(GraphInterface):
 
         Note: If such an edge does not exists the function will do nothing
         """
-        raise NotImplementedError
+        if node_id1 not in self.nodes or node_id2 not in self.nodes:
+            return False
+        if node_id1 in self.src_dest:
+            if node_id2 in self.src_dest[node_id1]:
+                self.src_dest[node_id1].pop(node_id2)
+                if self.src_dest[node_id1] == {}:
+                    self.src_dest.pop(node_id1)
+                self.mc += 1
+                self.num_of_edges -= 1
+                self.dest_src[node_id2].pop(node_id1)
+                if self.dest_src[node_id2] == {}:
+                    self.dest_src.pop(node_id2)
+                self.mc += 1
+                return True
+        return False
