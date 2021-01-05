@@ -1,3 +1,4 @@
+import random
 from typing import List
 from queue import Queue
 from DiGraph import DiGraph
@@ -41,7 +42,8 @@ class GraphAlgo(GraphAlgoInterface):
             json_nodes, json_edges = json_obj['Nodes'], json_obj['Edges']
             for obj in json_nodes:
                 if 'pos' in obj:
-                    graph1.add_node(obj['id'], tuple(float(s) for s in obj['pos'].strip("()").split(","))) #TODO: can have some witout tuple
+                    graph1.add_node(obj['id'], tuple(
+                        float(s) for s in obj['pos'].strip("()").split(",")))  # TODO: can have some witout tuple
                 else:
                     graph1.add_node(obj['id'], None)
             for obj in json_edges:
@@ -151,10 +153,10 @@ class GraphAlgo(GraphAlgoInterface):
     """
 
     def __dfs_algo(self, id1, s) -> dict:
-        '''
+        """
         private method:
         the Dijkstra's Algorithm
-        '''
+        """
         visited = {}
         for i in self.get_graph().get_all_v():
             visited[i] = False
@@ -210,3 +212,17 @@ class GraphAlgo(GraphAlgoInterface):
         ax.add_artist(circle2)
         ax.add_artist(circle3)
         plt.show()
+
+    def __random_pos(self, from_pos: tuple, to_pos: tuple, seed: int) -> tuple:
+        """
+        private method that gives random pos
+
+        @param from_pos: point of the start in x, y
+        @param to_pos: point of the end in x, y
+        @param seed: seed of randomness
+        @return: random pos in range
+        """
+        random.seed(seed)
+        rx = random.uniform(from_pos[0], to_pos[0])
+        ry = random.uniform(from_pos[1], to_pos[1])
+        return rx, ry
