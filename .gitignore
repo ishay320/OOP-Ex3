@@ -2,3 +2,4 @@
 .idea/
 src/stam.py
 /src/tests.py
+src/__pycache__/
