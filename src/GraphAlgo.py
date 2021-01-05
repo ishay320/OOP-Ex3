@@ -26,6 +26,7 @@ class GraphAlgo(GraphAlgoInterface):
         """
         :return: the directed graph on which the algorithm works on.
         """
+        print("hi")
         return self.__graph
 
     def load_from_json(self, file_name: str) -> bool:
