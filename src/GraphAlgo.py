@@ -32,7 +32,7 @@ class GraphAlgo(GraphAlgoInterface):
         """
         Loads a graph from a json file.
         @param file_name: The path to the json file
-        @returns True if the loading was successful, False o.w.
+        @returns True if the loading was successful, if fail return False
         """
         try:
             with open(file_name, 'r') as f:
@@ -40,7 +40,7 @@ class GraphAlgo(GraphAlgoInterface):
             graph1 = DiGraph()
             json_nodes, json_edges = json_obj['Nodes'], json_obj['Edges']
             for obj in json_nodes:
-                if 'pos' in obj:
+                if 'pos' in obj and obj['pos'] is not None:
                     graph1.add_node(obj['id'], tuple(float(s) for s in obj['pos'].strip("()").split(",")))
                 else:
                     graph1.add_node(obj['id'], None)
@@ -55,7 +55,7 @@ class GraphAlgo(GraphAlgoInterface):
         """
         Saves the graph in JSON format to a file
         @param file_name: The path to the out file
-        @return: True if the save was successful, False o.w.
+        @returns True if the loading was successful, if fail return False
         """
         json1 = {'Nodes': [], 'Edges': []}
         for key, value in self.get_graph().get_all_v().items():
@@ -102,7 +102,7 @@ class GraphAlgo(GraphAlgoInterface):
                         if close[i] != dist:
                             prev[i] = u
             visited[u] = True
-            tmp = self.smallest_w(close, visited)
+            tmp = self.__smallest_w(close, visited)
             if tmp > -1:
                 q.put(tmp)
         if close[id2] == float('inf'):
@@ -113,7 +113,10 @@ class GraphAlgo(GraphAlgoInterface):
             tmp2 = prev[tmp2]
         return close[id2], ls
 
-    def smallest_w(self, close, visited) -> int:
+    def __smallest_w(self, close, visited) -> int:
+        """
+        this is a private method for the Dijkstra's Algorithm
+        """
         min1, min_index = float('inf'), -1
         for i in close:
             if close[i] < min1 and not visited[i] and i in self.get_graph().get_all_v():
@@ -148,6 +151,10 @@ class GraphAlgo(GraphAlgoInterface):
     """
 
     def __dfs_algo(self, id1, s) -> dict:
+        """
+        private method:
+        the Dijkstra's Algorithm
+        """
         visited = {}
         for i in self.get_graph().get_all_v():
             visited[i] = False
@@ -174,7 +181,7 @@ class GraphAlgo(GraphAlgoInterface):
         """
         Finds all the Strongly Connected Component(SCC) in the graph.
         using the connected_component method for every node that not added yet to the list
-        If the graph is None the function return an empty list []
+        If the graph is None the function returns an empty list []
         @return: The list all SCC
         """
         ls = []
@@ -195,11 +202,24 @@ class GraphAlgo(GraphAlgoInterface):
         Otherwise, they will be placed in a random but elegant manner.
         @return: None
         """
-        circle1 = plt.Circle((0.1, 0.1), 0.03, color='r')
-        circle2 = plt.Circle((0.5, 0.5), 0.03, color='black')
-        circle3 = plt.Circle((1, 1), 0.03, color='blue', clip_on=False)
-        fig, ax = plt.subplots()
-        ax.add_artist(circle1)
-        ax.add_artist(circle2)
-        ax.add_artist(circle3)
-        plt.show()
+        x = [loc[0] for loc in self.get_graph().nodes.values()]
+        y = [loc[1] for loc in self.get_graph().nodes.values()]
+        nodes1, non_set = self.get_graph().nodes, set()
+        min_x, min_y, max_x, max_y = float('inf'), float('inf'), -float('inf'), -float('inf')
+        for key, value in nodes1:
+            if value is None:
+                non_set.add(key)
+            else:
+                if value[0] < min_x: min_x = value[0]
+                if value[1] < min_y: min_y = value[1]
+                if value[0] > max_x: max_x = value[0]
+                if value[1] > max_y: max_y = value[1]
+        plt.plot(x, y, 'o', color='blue', ms=10)
+        ax = plt.gca()
+        for node in nodes1:
+            for ne in self.get_graph().all_out_edges_of_node(node):
+                if nodes1[node] is not None and nodes1[ne] is not None:
+                    x1, y1 = nodes1[node][0], nodes1[node][1]
+                    x2, y2 = nodes1[ne][0], nodes1[ne][1]
+                    ax.arrow(x1, y1, x2 - x1, y2 - y1, width=0.00003, head_width=0.00018, head_length=0.0007,
+                             length_includes_head=True, fc='k', ec='k')
