@@ -131,8 +131,8 @@ class GraphAlgo(GraphAlgoInterface):
         ls = []
         if self.get_graph() is None or id1 not in self.get_graph().get_all_v():
             return ls
-        v1 = self.dfs_algo(id1, True)
-        v2 = self.dfs_algo(id1, False)
+        v1 = self.__dfs_algo(id1, True)
+        v2 = self.__dfs_algo(id1, False)
         for node in v1:
             if v1[node] and v2[node]:
                 ls.append(node)
@@ -148,7 +148,7 @@ class GraphAlgo(GraphAlgoInterface):
     6. return dict of all nodes that have been passed the Queue with value of True
     """
 
-    def dfs_algo(self, id1, s) -> dict:
+    def __dfs_algo(self, id1, s) -> dict:
         visited = {}
         for i in self.get_graph().get_all_v():
             visited[i] = False
