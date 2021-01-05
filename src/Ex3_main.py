@@ -45,7 +45,7 @@ def check0():
     print(g.all_out_edges_of_node(1))
     g_algo = GraphAlgo(g)
     print(g_algo.shortest_path(0, 3))
-    # g_algo.plot_graph()
+    g_algo.plot_graph()
 
 
 def check1():
@@ -60,7 +60,7 @@ def check1():
     print(g_algo.shortest_path(0, 3))
     print(g_algo.shortest_path(3, 1))
     g_algo.save_to_json(file + '_saved')
-    # g_algo.plot_graph()
+    g_algo.plot_graph()
 
 
 def check2():
@@ -73,7 +73,6 @@ def check2():
     g_algo.get_graph().remove_edge(13, 14)
     g_algo.save_to_json(file + "_edited")
     dist, path = g_algo.shortest_path(1, 7)
-    print("check 2")
     print(dist, path)
     dist, path = g_algo.shortest_path(47, 19)
     print(dist, path)
@@ -83,7 +82,7 @@ def check2():
     print(dist, path)
     print(g_algo.connected_component(0))
     print(g_algo.connected_components())
-    # g_algo.plot_graph()
+    g_algo.plot_graph()
 
 
 if __name__ == '__main__':

@@ -1,3 +1,4 @@
+import random
 from typing import List
 from queue import Queue
 from DiGraph import DiGraph
@@ -140,20 +141,15 @@ class GraphAlgo(GraphAlgoInterface):
                 ls.append(node)
         return ls
 
-    """ 
-    The DFS algorithm:
-    1. add the id1 node to a Queue
-    2. check if the Queue is empty (if so go to stage 3 ,else go to stage 6)
-    3. pop the next node in the Queue to n
-    4. add to the Queue all nodes who is neighbors to node n
-    5. go back to stage 2
-    6. return dict of all nodes that have been passed the Queue with value of True
-    """
-
     def __dfs_algo(self, id1, s) -> dict:
         """
-        private method:
-        the Dijkstra's Algorithm
+        The DFS algorithm:
+        1. add the id1 node to a Queue
+        2. check if the Queue is empty (if so go to stage 3 ,else go to stage 6)
+        3. pop the next node in the Queue to n
+        4. add to the Queue all nodes who is neighbors to node n
+        5. go back to stage 2
+        6. return dict of all nodes that have been passed the Queue with value of True
         """
         visited = {}
         for i in self.get_graph().get_all_v():
@@ -202,24 +198,48 @@ class GraphAlgo(GraphAlgoInterface):
         Otherwise, they will be placed in a random but elegant manner.
         @return: None
         """
-        x = [loc[0] for loc in self.get_graph().nodes.values()]
-        y = [loc[1] for loc in self.get_graph().nodes.values()]
-        nodes1, non_set = self.get_graph().nodes, set()
+        nodes1 = self.get_graph().nodes
         min_x, min_y, max_x, max_y = float('inf'), float('inf'), -float('inf'), -float('inf')
-        for key, value in nodes1:
-            if value is None:
-                non_set.add(key)
-            else:
-                if value[0] < min_x: min_x = value[0]
-                if value[1] < min_y: min_y = value[1]
-                if value[0] > max_x: max_x = value[0]
-                if value[1] > max_y: max_y = value[1]
+        for key in nodes1:
+            if nodes1[key] is not None:
+                if nodes1[key][0] < min_x:
+                    min_x = nodes1[key][0]
+                if nodes1[key][1] < min_y:
+                    min_y = nodes1[key][1]
+                if nodes1[key][0] > max_x:
+                    max_x = nodes1[key][0]
+                if nodes1[key][1] > max_y:
+                    max_y = nodes1[key][1]
+        if min_x == float('inf') and min_y == float('inf'):
+            min_x, min_y, max_x, max_y = 0, 0, len(nodes1)*2, len(nodes1)*2
+        for key in nodes1:
+            if nodes1[key] is None:
+                nodes1[key] = self.__random_pos((min_x, min_y), (max_x, max_y), key)
+        x = [nodes1[loc][0] for loc in nodes1]
+        y = [nodes1[loc][1] for loc in nodes1]
         plt.plot(x, y, 'o', color='blue', ms=10)
-        ax = plt.gca()
         for node in nodes1:
-            for ne in self.get_graph().all_out_edges_of_node(node):
-                if nodes1[node] is not None and nodes1[ne] is not None:
-                    x1, y1 = nodes1[node][0], nodes1[node][1]
-                    x2, y2 = nodes1[ne][0], nodes1[ne][1]
-                    ax.arrow(x1, y1, x2 - x1, y2 - y1, width=0.00003, head_width=0.00018, head_length=0.0007,
-                             length_includes_head=True, fc='k', ec='k')
+            plt.text(nodes1[node][0], nodes1[node][1], f'{node}', fontsize=12, color='green')
+            if self.get_graph().all_out_edges_of_node(node) is not None:
+                for ne in self.get_graph().all_out_edges_of_node(node):
+                    if nodes1[node] is not None and nodes1[ne] is not None:
+                        x1, y1 = nodes1[node][0], nodes1[node][1]
+                        x2, y2 = nodes1[ne][0], nodes1[ne][1]
+                        plt.arrow(x1, y1, x2 - x1, y2 - y1, width=(max_y - min_y) / 400,
+                                  head_width=(max_y - min_y) / 50,
+                                  head_length=(max_y - min_y) / 15, length_includes_head=True, fc='k', ec='k')
+        plt.show()
+
+    @staticmethod
+    def __random_pos(from_pos: tuple, to_pos: tuple, seed: int) -> tuple:
+        """
+        private method that gives random pos
+        @param from_pos: point of the start in x, y
+        @param to_pos: point of the end in x, y
+        @param seed: seed of randomness
+        @return: random pos in range
+        """
+        random.seed(seed)
+        rx = random.uniform(from_pos[0], to_pos[0])
+        ry = random.uniform(from_pos[1], to_pos[1])
+        return rx, ry
