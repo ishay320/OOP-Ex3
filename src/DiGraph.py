@@ -32,11 +32,30 @@ class DiGraph(GraphInterface):
         """
         return self.num_of_edges
 
-    def get_all_v(self) -> dict:
+    def all_v(self) -> dict:
         """return a dictionary of all the nodes in the Graph, each node is represented using a pair
-         (node_id, node_data)
+         (node_id, node_data) for using
         """
         return self.nodes
+
+    def get_all_v(self) -> dict:
+        """return a dictionary of all the nodes in the Graph, each node is written how many edge in or out she got
+         for printing
+        """
+        j = {}
+        num = 0
+        for i in self.nodes:
+            if self.all_out_edges_of_node(i) is not None:
+                out = len(self.all_out_edges_of_node(i))
+            else:
+                out = 0
+            if self.all_in_edges_of_node(i) is not None:
+                e_in = len(self.all_in_edges_of_node(i))
+            else:
+                e_in = 0
+            j[num] = {i: f'|edges out| {out} |edges in| {e_in}'}
+            num+=1
+        return j
 
     def all_in_edges_of_node(self, id1: int) -> dict:
         """return a dictionary of all the nodes connected to (into) node_id ,
@@ -160,3 +179,9 @@ class DiGraph(GraphInterface):
                 self.mc += 1
                 return True
         return False
+
+    def __str__(self):
+        return f"Graph: |V|={self.v_size()} , |E|={self.e_size()}"
+
+    def __repr__(self):
+        return self.__str__()

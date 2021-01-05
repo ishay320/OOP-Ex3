@@ -15,7 +15,7 @@ class GraphInterface:
         """
         raise NotImplementedError
 
-    def get_all_v(self) -> dict:
+    def all_v(self) -> dict:
         """return a dictionary of all the nodes in the Graph, each node is represented using a pair
          (node_id, node_data)
         """
