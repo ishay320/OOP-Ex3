@@ -32,7 +32,7 @@ class GraphAlgo(GraphAlgoInterface):
         """
         Loads a graph from a json file.
         @param file_name: The path to the json file
-        @returns True if the loading was successful, False o.w.
+        @returns True if the loading was successful, if fail return False
         """
         try:
             with open(file_name, 'r') as f:
@@ -55,7 +55,7 @@ class GraphAlgo(GraphAlgoInterface):
         """
         Saves the graph in JSON format to a file
         @param file_name: The path to the out file
-        @return: True if the save was successful, False o.w.
+        @returns True if the loading was successful, if fail return False
         """
         json1 = {'Nodes': [], 'Edges': []}
         for key, value in self.get_graph().get_all_v().items():
@@ -114,6 +114,9 @@ class GraphAlgo(GraphAlgoInterface):
         return close[id2], ls
 
     def smallest_w(self, close, visited) -> int:
+        """
+        this is a private method for the Dijkstra's Algorithm
+        """
         min1, min_index = float('inf'), -1
         for i in close:
             if close[i] < min1 and not visited[i] and i in self.get_graph().get_all_v():
@@ -148,6 +151,10 @@ class GraphAlgo(GraphAlgoInterface):
     """
 
     def __dfs_algo(self, id1, s) -> dict:
+        '''
+        private method:
+        the Dijkstra's Algorithm
+        '''
         visited = {}
         for i in self.get_graph().get_all_v():
             visited[i] = False
@@ -174,7 +181,7 @@ class GraphAlgo(GraphAlgoInterface):
         """
         Finds all the Strongly Connected Component(SCC) in the graph.
         using the connected_component method for every node that not added yet to the list
-        If the graph is None the function return an empty list []
+        If the graph is None the function returns an empty list []
         @return: The list all SCC
         """
         ls = []
