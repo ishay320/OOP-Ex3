@@ -41,7 +41,7 @@ class GraphAlgo(GraphAlgoInterface):
             json_nodes, json_edges = json_obj['Nodes'], json_obj['Edges']
             for obj in json_nodes:
                 if 'pos' in obj:
-                    graph1.add_node(obj['id'], tuple(float(s) for s in obj['pos'].strip("()").split(",")))
+                    graph1.add_node(obj['id'], tuple(float(s) for s in obj['pos'].strip("()").split(","))) #TODO: can have some witout tuple
                 else:
                     graph1.add_node(obj['id'], None)
             for obj in json_edges:
