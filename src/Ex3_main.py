@@ -82,7 +82,8 @@ def check2():
     print(dist, path)
     print(g_algo.connected_component(0))
     print(g_algo.connected_components())
-    g_algo.plot_graph()
+    #g_algo.plot_graph()
+    g_algo.save_to_json("try1")
 
 
 if __name__ == '__main__':

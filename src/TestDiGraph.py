@@ -54,6 +54,19 @@ class MyTestCase(unittest.TestCase):
         # again
         self.assertFalse(g.add_edge(1, 2, 1))
 
+        # add some edges and check how many
+        self.add_node_to_graph((3, 4), g)
+        g.add_edge(3, 4, 2)
+        self.assertEqual(g.e_size(), 2)
+
+        # add the same
+        g.add_edge(3, 4, 2)
+        self.assertEqual(g.e_size(), 2)
+
+        # add with dif w
+        g.add_edge(3, 4, 3)
+        self.assertEqual(g.e_size(), 2)
+
     def test_remove_node(self):
         # setup
         g = DiGraph()

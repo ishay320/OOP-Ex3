@@ -60,17 +60,17 @@ class GraphAlgo(GraphAlgoInterface):
         @returns True if the loading was successful, if fail return False
         """
         json1 = {'Nodes': [], 'Edges': []}
-        for key, value in self.get_graph().get_all_v().items():
+        for key, value in self.get_graph().all_v().items():
             if value is not None:
                 json1['Nodes'].append({'pos': ','.join(str(x) for x in value), 'id': key})
             else:
                 json1['Nodes'].append({'pos': None, 'id': key})
-        for src in self.get_graph().get_all_v():
+        for src in self.get_graph().all_v():
             if self.get_graph().all_out_edges_of_node(src) is not None:
                 for dest, w in self.get_graph().all_out_edges_of_node(src).items():
                     json1['Edges'].append({'src': src, 'w': w, 'dest': dest})
         try:
-            with open(file_name + '.json', 'w') as f:
+            with open(file_name, 'w') as f:
                 json.dump(json1, f)
                 return True
         except FileExistsError:
@@ -84,15 +84,15 @@ class GraphAlgo(GraphAlgoInterface):
         @return: The distance of the path, a list of the nodes ids that the path goes through
         If there is no path between id1 and id2, or one of them dose not exist the function returns (float('inf'),[])
         """
-        if id1 not in self.get_graph().get_all_v() or id2 not in self.get_graph().get_all_v():
+        if id1 not in self.get_graph().all_v() or id2 not in self.get_graph().all_v():
             return float('inf'), []
         if id1 == id2:
             return 0, [id1]
         visited, close, prev, dist = {}, {}, {}, 0
-        for i in self.get_graph().get_all_v():
+        for i in self.get_graph().all_v():
             visited[i], close[i], prev[i] = False, float('inf'), -1
         visited[id1], close[id1] = True, 0
-        q = Queue(maxsize=len(self.get_graph().get_all_v()))
+        q = Queue(maxsize=len(self.get_graph().all_v()))
         q.put(id1)
         while not q.empty():
             u = q.get()
@@ -121,7 +121,7 @@ class GraphAlgo(GraphAlgoInterface):
         """
         min1, min_index = float('inf'), -1
         for i in close:
-            if close[i] < min1 and not visited[i] and i in self.get_graph().get_all_v():
+            if close[i] < min1 and not visited[i] and i in self.get_graph().all_v():
                 min1, min_index = close[i], i
         return min_index
 
@@ -133,7 +133,7 @@ class GraphAlgo(GraphAlgoInterface):
         @return: The list of nodes in the SCC
         """
         ls = []
-        if self.get_graph() is None or id1 not in self.get_graph().get_all_v():
+        if self.get_graph() is None or id1 not in self.get_graph().all_v():
             return ls
         v1 = self.__dfs_algo(id1, True)
         v2 = self.__dfs_algo(id1, False)
@@ -153,9 +153,9 @@ class GraphAlgo(GraphAlgoInterface):
         6. return dict of all nodes that have been passed the Queue with value of True
         """
         visited = {}
-        for i in self.get_graph().get_all_v():
+        for i in self.get_graph().all_v():
             visited[i] = False
-        q = Queue(maxsize=len(self.get_graph().get_all_v()))
+        q = Queue(maxsize=len(self.get_graph().all_v()))
         q.put(id1)
         visited[id1] = True
         while not q.empty():
@@ -182,10 +182,10 @@ class GraphAlgo(GraphAlgoInterface):
         @return: The list all SCC
         """
         ls = []
-        if self.get_graph() is None or len(self.get_graph().get_all_v()) == 0:
+        if self.get_graph() is None or len(self.get_graph().all_v()) == 0:
             return []
         set_nodes = set()
-        for node in self.get_graph().get_all_v():
+        for node in self.get_graph().all_v():
             if node not in set_nodes:
                 tmp = self.connected_component(node)
                 ls.append(tmp)
