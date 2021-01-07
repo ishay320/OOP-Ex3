@@ -54,23 +54,27 @@ class DiGraph(GraphInterface):
             else:
                 e_in = 0
             j[num] = {i: f'|edges out| {out} |edges in| {e_in}'}
-            num+=1
+            num += 1
         return j
 
     def all_in_edges_of_node(self, id1: int) -> dict:
         """return a dictionary of all the nodes connected to (into) node_id ,
         each node is represented using a pair (other_node_id, weight)
          """
-        if id1 not in self.dest_src:
+        if id1 not in self.nodes:
             return None
+        if id1 not in self.dest_src:
+            return {}
         return self.dest_src[id1]
 
     def all_out_edges_of_node(self, id1: int) -> dict:
         """return a dictionary of all the nodes connected from node_id , each node is represented using a pair
         (other_node_id, weight)
         """
-        if id1 not in self.src_dest:
+        if id1 not in self.nodes:
             return None
+        if id1 not in self.src_dest:
+            return {}
         return self.src_dest[id1]
 
     def get_mc(self) -> int:
@@ -95,8 +99,7 @@ class DiGraph(GraphInterface):
             return False
         if id1 in self.src_dest:  # check if the edge exist
             if id2 in self.src_dest[id1]:
-                if self.src_dest[id1][id2] == weight:  ## TODO: check with boaz
-                    return False
+                return False
         if id1 in self.src_dest:
             self.src_dest[id1][id2] = weight
         else:
@@ -109,7 +112,7 @@ class DiGraph(GraphInterface):
         self.num_of_edges += 1
         return True
 
-    def add_node(self, node_id: int, pos: tuple = None) -> bool:  # TODO: check if input is not int
+    def add_node(self, node_id: int, pos: tuple = None) -> bool:
         """
         Adds a node to the graph.
         @param node_id: The node ID
