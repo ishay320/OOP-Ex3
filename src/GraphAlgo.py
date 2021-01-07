@@ -6,6 +6,7 @@ from GraphAlgoInterface import GraphAlgoInterface
 from src import GraphInterface
 import json
 import matplotlib.pyplot as plt
+import networkx as n
 
 
 class GraphAlgo(GraphAlgoInterface):
