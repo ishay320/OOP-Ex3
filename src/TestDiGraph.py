@@ -173,6 +173,46 @@ class MyTestCase(unittest.TestCase):
         g.remove_edge(1, 2)
         self.assertNotEqual(mc, g.get_mc())
 
+    def test_equal(self):
+        g1 = DiGraph()
+        g2 = DiGraph()
+        # empty
+        self.assertEqual(g1, g2)
+        # node diff
+        g1.add_node(1)
+        self.assertNotEqual(g1, g2)
+        # node equal
+        g2.add_node(1)
+        self.assertEqual(g1, g2)
+        # weight diff
+        g1.remove_node(1)
+        g1.add_node(1, (1, 3))
+        self.assertNotEqual(g1, g2)
+        # node not in order
+        g1.remove_node(1)
+        g1.add_node(1)
+        g1.add_node(2)
+        g2.add_node(3)
+        g1.add_node(3)
+        g2.add_node(2)
+        self.assertEqual(g1, g2)
+        # edge diff
+        g1.add_edge(1, 2, 1)
+        self.assertNotEqual(g1, g2)
+        # edge equal
+        g2.add_edge(1, 2, 1)
+        self.assertEqual(g1, g2)
+        # edge not in order
+        g1.add_edge(2, 1, 1)
+        g2.add_edge(3, 2, 1)
+        g1.add_edge(3, 2, 1)
+        g2.add_edge(2, 1, 1)
+        self.assertEqual(g1, g2)
+        # w diff
+        g1.add_edge(3, 1, 1)
+        g2.add_edge(3, 1, 2)
+        self.assertNotEqual(g1, g2)
+
 
 if __name__ == '__main__':
     unittest.main()

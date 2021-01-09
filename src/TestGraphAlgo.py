@@ -1,5 +1,7 @@
 import unittest
 
+import networkx as nx
+
 from DiGraph import DiGraph
 from GraphAlgo import GraphAlgo
 
@@ -184,6 +186,50 @@ class AlgoTest(unittest.TestCase):
         g.add_edge(3, 1, 12)
         a = GraphAlgo(g)
         self.assertEqual(a.connected_components(), [[1, 2, 3]])
+
+    def test_against_networkx(self):
+        a = GraphAlgo()
+        l = ["../data/G_10_80_0.json", "../data/G_100_800_0.json", "../data/G_1000_8000_0.json",
+             "../data""/G_10000_80000_0.json", "../data/G_20000_160000_0.json", "../data/G_30000_240000_0.json"]
+        for i in l:
+            # print("Graph:",i,":")
+            a.load_from_json(i)
+            n = copy_to_nex(a.get_graph())
+            # shortest path
+            list_of_a = a.shortest_path(0, 9)
+            # print("us:")
+            # print("shortest path:")
+            # print(*list_of_a)
+            path_of_n = nx.shortest_path_length(n, 0, 9, weight="weight")
+            list_of_n = nx.shortest_path(n, 0, 9, weight="weight")
+            self.assertEqual(path_of_n, list_of_a[0])
+            self.assertEqual(list_of_n, list_of_a[1])
+            # connected components
+            connected_a = a.connected_components()
+            connected_n = nx.strongly_connected_components(n)
+            # print("connected components:")
+            # print(connected_a)
+            set_list = list()
+            # print("NetuorkX:")
+            # print("shortest path:")
+            # print(path_of_n, list_of_n)
+            # print("connected components:")
+            for j in connected_a:
+                set_list.append(set(j))
+            for j in connected_n:
+                self.assertIn(j, set_list)
+                print(j,end=", ")
+            # print()
+            # print("======================================")
+
+def copy_to_nex(g) -> nx:
+    gnx = nx.DiGraph()
+    for i in g.nodes.keys():
+        gnx.add_node(i)
+    for i in g.nodes.keys():
+        for j in g.all_out_edges_of_node(i).keys():
+            gnx.add_edge(i, j, weight=g.src_dest[i][j])
+    return gnx
 
 
 if __name__ == '__main__':

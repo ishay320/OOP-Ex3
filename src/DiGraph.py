@@ -188,3 +188,24 @@ class DiGraph(GraphInterface):
 
     def __repr__(self):
         return self.__str__()
+
+    def __eq__(self, other):
+        if type(other) != type(self):
+            raise TypeError(f"you tried to compare DiGraph with {type(other)}")
+        other = DiGraph(other)
+        if self.nodes == other.nodes:
+            for i in self.src_dest:
+                if i in other.src_dest:
+                    for j in self.src_dest[i]:
+                        if j in other.src_dest[i]:
+                            if self.src_dest[i][j] != other.src_dest[i][j]:
+                                return False
+                        else:
+                            return False
+                else:
+                    return False
+        else:
+            return False
+        if self.num_of_edges != other.num_of_edges:
+            return False
+        return True
