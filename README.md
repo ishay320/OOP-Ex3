@@ -85,4 +85,4 @@ a.shortest_path(1,5)
 the shortest path from Jerusalem and Netanya is 48 km  
 and the path is: jerusalem->Ramat-Gan->Netanya  
 the graph will look like this:
-(import photo)  
+![graph example](/wiki/example_graph.png)
