@@ -6,6 +6,7 @@ from GraphAlgoInterface import GraphAlgoInterface
 from src import GraphInterface
 import json
 import matplotlib.pyplot as plt
+import networkx as n
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -69,7 +70,7 @@ class GraphAlgo(GraphAlgoInterface):
                 for dest, w in self.get_graph().all_out_edges_of_node(src).items():
                     json1['Edges'].append({'src': src, 'w': w, 'dest': dest})
         try:
-            with open(file_name + '.json', 'w') as f:
+            with open(file_name, 'w') as f:
                 json.dump(json1, f)
                 return True
         except FileExistsError:

@@ -128,7 +128,7 @@ class AlgoTest(unittest.TestCase):
         self.assertTrue(a.save_to_json("test"))
 
         # read the file and check
-        self.assertTrue(a.load_from_json("test.json"))
+        self.assertTrue(a.load_from_json("test"))
         self.assertEqual(a.get_graph().all_v(), {})
 
         # have some data
@@ -139,7 +139,7 @@ class AlgoTest(unittest.TestCase):
         a = GraphAlgo(g)
         b = GraphAlgo()
         self.assertTrue(a.save_to_json("test"))
-        self.assertTrue(b.load_from_json("test.json"))
+        self.assertTrue(b.load_from_json("test"))
         self.assertEqual(a.get_graph().all_v(), b.get_graph().all_v())
         self.assertEqual(a.get_graph().get_mc(), b.get_graph().get_mc())
         self.assertEqual(a.get_graph().all_out_edges_of_node(2), b.get_graph().all_out_edges_of_node(2))
