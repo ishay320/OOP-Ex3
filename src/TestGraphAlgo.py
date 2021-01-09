@@ -218,7 +218,7 @@ class AlgoTest(unittest.TestCase):
                 set_list.append(set(j))
             for j in connected_n:
                 self.assertIn(j, set_list)
-                print(j,end=", ")
+            #    print(j,end=", ")
             # print()
             # print("======================================")
 
