@@ -1,1 +1,0 @@
-{"Nodes": [{"pos": null, "id": 1}, {"pos": null, "id": 2}, {"pos": null, "id": 3}, {"pos": "12,13", "id": 4}], "Edges": [{"src": 2, "w": 1, "dest": 3}, {"src": 3, "w": 2, "dest": 1}, {"src": 4, "w": 3, "dest": 2}]}
