@@ -1,7 +1,7 @@
 import unittest
 
 import networkx as nx
-
+import os
 from DiGraph import DiGraph
 from GraphAlgo import GraphAlgo
 
@@ -143,6 +143,7 @@ class AlgoTest(unittest.TestCase):
         self.assertEqual(a.get_graph().all_v(), b.get_graph().all_v())
         self.assertEqual(a.get_graph().get_mc(), b.get_graph().get_mc())
         self.assertEqual(a.get_graph().all_out_edges_of_node(2), b.get_graph().all_out_edges_of_node(2))
+        os.remove("test")
 
     def test_connected_components(self):
         # setup
@@ -187,19 +188,14 @@ class AlgoTest(unittest.TestCase):
         a = GraphAlgo(g)
         self.assertEqual(a.connected_components(), [[1, 2, 3]])
 
-    def test_against_networkx(self):
+    def test_against_networkx(self):  # only 2 checks the rest is in benchmark
         a = GraphAlgo()
-        l = ["../data/G_10_80_0.json", "../data/G_100_800_0.json", "../data/G_1000_8000_0.json",
-             "../data""/G_10000_80000_0.json", "../data/G_20000_160000_0.json", "../data/G_30000_240000_0.json"]
+        l = ["../data/G_10_80_0.json", "../data/G_100_800_0.json"]
         for i in l:
-            # print("Graph:",i,":")
             a.load_from_json(i)
             n = copy_to_nex(a.get_graph())
             # shortest path
             list_of_a = a.shortest_path(0, 9)
-            # print("us:")
-            # print("shortest path:")
-            # print(*list_of_a)
             path_of_n = nx.shortest_path_length(n, 0, 9, weight="weight")
             list_of_n = nx.shortest_path(n, 0, 9, weight="weight")
             self.assertEqual(path_of_n, list_of_a[0])
@@ -207,20 +203,12 @@ class AlgoTest(unittest.TestCase):
             # connected components
             connected_a = a.connected_components()
             connected_n = nx.strongly_connected_components(n)
-            # print("connected components:")
-            # print(connected_a)
             set_list = list()
-            # print("NetuorkX:")
-            # print("shortest path:")
-            # print(path_of_n, list_of_n)
-            # print("connected components:")
             for j in connected_a:
                 set_list.append(set(j))
             for j in connected_n:
                 self.assertIn(j, set_list)
-            #    print(j,end=", ")
-            # print()
-            # print("======================================")
+
 
 def copy_to_nex(g) -> nx:
     gnx = nx.DiGraph()
