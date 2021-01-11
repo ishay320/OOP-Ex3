@@ -10,7 +10,9 @@ this is a university project about directed weighted graph in python.
 ## How to use
 download and put in your favorite IDE :)  
 in src/DiGraph.py is the object that contain the graph.  
-in src/GraphAlgo.py is the object that do the algorithm.
+in src/GraphAlgo.py is the object that do the algorithm.  
+all the test in src
+##### note: in benchmark file, the test take a long time and this file is for time comparison and full correctness.
 
 ## How its built
 the GraphAlgo contain the logic pf the algorithm that operate on the graph that in DiGraph.
